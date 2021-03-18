@@ -103,7 +103,7 @@ const Messanger = {
         this.contacts.visibleContacts = this.contacts.allContacts.filter(item => item.name.match(pattern))
       },
       close(){
-          this.modal = false
+          this.modal.seen = false
       },
       uploadFile(id,to,mode = 'default'){
           let file = document.getElementById(id).files[0]
@@ -172,7 +172,7 @@ const Messanger = {
         document.addEventListener('keydown',(e)=>{
             switch(e.code){
                 case 'Escape' : {
-                    this.modal = false
+                    this.modal.seen = false
                 }
             }
         })
