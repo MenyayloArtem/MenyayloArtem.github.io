@@ -66,6 +66,8 @@ body {
 #image-block {
     width: 80%;
     min-height: auto;
+    display: flex;
+    justify-content: center;
     margin: 4px;
 }
 
@@ -79,9 +81,31 @@ body {
 img {
     max-width: 100%;
 }
+ul {
+    margin: 5px 5px;
+}
+
+#empty  {
+    width: 100%;
+    height: 300px;
+}
+
+#ico {
+    float: left;
+    margin: 5px;
+}
 
 @media (max-width: 768px){
     #main {
         width: 100%;
+    }
+    #title-block {
+        font-size: 28px;
+    }
+    #subtitle-block {
+        font-size: 24px;
+    }
+    #text-block {
+        font-size: 18px;
     }
 }
