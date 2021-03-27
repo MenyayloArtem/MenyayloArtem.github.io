@@ -56,6 +56,7 @@ body {
 }
 
 #text-block {
+    display: block;
     width: 80%;
     min-height: auto;
     margin-bottom: 10px;
