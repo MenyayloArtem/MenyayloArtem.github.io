@@ -3,90 +3,109 @@ const Messanger = {
       return {
           theme : localStorage.getItem('theme') || 'default',
           loadedImg : null,
+
           modal : {
               seen : false,
               option : null
           },
-          editMode : false,
+
           message : {
               text : '',
-              imgSrc : ''
+              img : ''
           },
+
           selected : 'chats',
           blackoutContent: {},
           selectedItem : {},
           searchValue : "",
+          searchUserValue : "",
+
           user : {
               editSeen : false,
-              avatarUrl : "7f9b7694df762d4a43e9a67760ba61af.jpg",
+              avatarUrl : "avatars/7f9b7694df762d4a43e9a67760ba61af.jpg",
               nickname : "Артём",
-              status : "Автор проекта",
+              status : "Создатель проекта",
               email : 'example@email.com',
               permission : 'admin',
+              friends : [
+                  {
+                    avatarUrl : "avatars/default.jpg",
+                    nickname : "Другой пользователь",
+                    status : 'Тестер',
+                  }
+                ],
               id : ''
           },
-          editedUser : {},
+
         newConv: {
             name : '',
-            subname : '',
+            snbname : '',
             img : ''
         },
-        chats : {
-            options : {
-                active : true
-            },
-            allChats : [
+
+        chats : [
                 {
-                    avatarUrl : 'BwFyibsDUmc.jpg',
+                    avatarUrl : 'avatars/BwFyibsDUmc.jpg',
                     name : 'three friends',
                     description : 'Коммунисты',
-                    messages : []
-                },
-                {
-                    avatarUrl : '1dcc3916e832a8a7ad5049ec42ef97bf.jpg',
-                    name : 'Беседа 1',
-                    description : 'Беседа',
-                    messages : []
+                    messages : [],
+                    members : [{
+              avatarUrl : "avatars/7f9b7694df762d4a43e9a67760ba61af.jpg",
+              nickname : "Артём",
+              status : "Создатель проекта",
+                    },{
+                        avatarUrl : "avatars/default.jpg",
+                        nickname : "Другой пользователь",
+                        status : 'Тестер',
+                    }]
                 }
             ],
-            visibleChats : [
 
-            ]
-        },
-        contacts : {
-            options : {
-                active : false
-            },
-           allContacts : [
-            {
-                avatarUrl : 'https://cm1.narvii.com/7113/9c1dbcec5765ef821fd3cda8e87f1f7173234739_00.jpg',
-                name : 'Пользователь',
-                lastMessage : 'Что-то',
-                id : Math.random()
-            }
-           ],
-           visibleContacts : [
+        searchedUser : null,
+        loaded : null
 
-           ]
-      }
       }
     },
+
     computed : {
-        edit(){
-            return this.user
+        canInvite(){
+            let friends = this.user.friends.allFriends.slice(0)
+            let members = this.selectedItem.members.map(item => item.id)
+            friends = friends.filter(item => {
+                return !members.includes(item.id)
+            })
+            return friends
+        },
+
+        editUserBuffer(){
+            return {
+                avatarUrl : this.user.avatarUrl,
+                nickname : this.user.nickname,
+                status : this.user.status
+            }
+        },
+        visible(){
+        let pattern = new RegExp(`${this.searchValue}`,'gi');
+        let chats = this.chats.filter(item => item.name.match(pattern))
+        let friends = this.user.friends.filter(item => item.nickname.match(pattern))
+        return {chats,friends}
         }
     },
+
     methods : {
+    
       sendMessage(){
             let message = {
                   avatarUrl : this.user.avatarUrl.split('/')[1],
                   sender : this.user.nickname,
                   senderId : this.user.id,
                   text : this.message.text.trim(),
-                  imgSrc : this.message.imgSrc
+                  room : this.selectedItem.id,
+                  img : this.message.img
               }
 
-        if(message.text && message.text.length < 300){
+        if(message.text && message.text.length < 30000){
+            this.newMessage = ''
             this.selectedItem.messages.push(message)
             let messages = document.getElementById("messages")
             setTimeout(()=>{
@@ -94,42 +113,63 @@ const Messanger = {
             },0)
         }
         this.message.text = ''
-        this.message.imgSrc = ""
+        this.message.img = ""
         document.getElementById('inputFile').value = ''
       },
-      Search(){
-        let pattern = new RegExp(`${this.searchValue}`,'gi');
-        this.chats.visibleChats = this.chats.allChats.filter(item => item.name.match(pattern))
-        this.contacts.visibleContacts = this.contacts.allContacts.filter(item => item.name.match(pattern))
+
+      Save(){
+        for(let key in this.editedUser){
+            this.user[key] = this.editedUser[key]
+            this.user.editSeen = false
+        }
       },
       close(){
           this.modal.seen = false
       },
-      uploadFile(id,to,mode = 'default'){
+    setImg(data){
+        this.message.img = data
+    },
+    uploadFile(id,to,mode){
           let file = document.getElementById(id).files[0]
           let reader = new FileReader()
-          var result = null
           if(file){
-            reader.onloadend = () => {
-            var result = reader.result
-            if(mode == 'default'){
+            reader.onloadend =  () => {
+            let result = reader.result
+            switch(mode){
+                case 'default' : {
+                if(to){
                 document.getElementById(to).src = result
-            } else if (mode == 'msg') {
-                this.message.imgSrc = result
+                }
+                }
+                break;
+                case 'save' : {
+                    this.loaded = result
+                }
+                break;
+                case 'msg' : {
+                    this.setImg(result)
+                }
+                break;
+                case 'get' : {
+                return result
+                }
             }
           }
             reader.readAsDataURL(file)
           } else {
               result = null
           }
+          
       },
+
       select(chat){
         if(this.selectedItem){
-            const previousRoom = this.selectedItem.id
-        this.selectedItem = chat
-        const currentRoom = this.selectedItem.id
+            if(chat){
+                this.selectedItem = chat
+            }
         }
       },
+
       chooseTheme(theme){
         return function(){
             this.theme = theme
@@ -137,6 +177,45 @@ const Messanger = {
             localStorage.setItem('theme',theme)
         }
       },
+
+      newContact(){
+        let form = document.getElementById('n')
+        let fd = new FormData(form)
+        this.uploadFile('editImg',null,'save')
+          const contact = {
+            name : fd.get('convName'),
+            description : fd.get('convSubname'),
+            messages : [],
+            members : [{
+                avatarUrl : "avatars/7f9b7694df762d4a43e9a67760ba61af.jpg",
+                nickname : "Артём",
+                status : "Создатель проекта",
+            }]
+        }
+        const avatarUrl = document.getElementById('edit-img-preview').src
+        contact.avatarUrl = avatarUrl
+        if(!contact.avatarUrl){
+            contact.avatarUrl = 'avatars/default.jpg'
+        }
+        if(!contact.description){
+            contact.description = 'Участники (1/5)'
+        }
+        if(contact.name){
+            this.chats.allChats.push(contact)
+            this.Search()
+            this.close()
+        } else {
+            alert('Укажите имя беседы')
+        }
+      },
+
+      invite(user,contactId){
+          console.log(user)
+        socket.emit('invite',{
+            user,contactId
+        })
+      },
+
       chooseSetting(setting){
           if(setting == 'other'){
                 this.blackoutContent = {
@@ -151,24 +230,35 @@ const Messanger = {
         this.modal.option = setting
         this.modal.seen = true
       },
+
       editUser(){
-          let form = document.getElementById('x')
-          let formData = new FormData(form)
-          this.modal.seen = false
+        const avatarUrl = document.getElementById('edit-img-preview').src
+        this.uploadFile('editImg',null,'save')
+        console.log(this.loaded)
+        this.user = this.editUserBuffer
+        this.user.avatarUrl = avatarUrl
+        this.modal.seen = false
       },
-      openUserEditor(){
-          this.modal.seen = true
-          this.modal.option = "editMode"
-      }
+    exit(){
+        localStorage.setItem('follow','false')
+        document.location.href = '/'
     },
-    async mounted(){
-        this.select(this.chats.allChats[0])
-        document.getElementsByTagName('link')[1].href = `css/${this.theme}Theme.css`
-        this.user.avatarUrl = 'avatars/' + this.user.avatarUrl
+
+    isFriend(id){
+        return this.user.friends.allFriends.findIndex(item => item.id == id) >= 0
+    },
+    doFriend(user){
+        this.user.friends.allFriends.push(user)
         this.Search()
-        let messages = document.getElementById("messages")
-        messages.scrollTo(0,messages.scrollHeight)
-        document.getElementsByTagName('link')[1].href = `css/${this.theme}Theme.css`
+        this.searchUserValue = ''
+        this.searchedUser = null
+    },
+    },
+
+
+    async mounted(){
+    document.getElementsByTagName('link')[1].href = `css/${this.theme}Theme.css`
+    this.select(this.chats[0])
         document.addEventListener('keydown',(e)=>{
             switch(e.code){
                 case 'Escape' : {

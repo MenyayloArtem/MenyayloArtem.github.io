@@ -153,19 +153,36 @@ body {
 #menuItems {
     display: flex;
     flex-direction: column;
-    width: 90%;
-    height: 700px;
+    width: 100%;
+    height: 500px;
     overflow-y: scroll;
 }
 
-.chatItem {
+#menuItemsWrapper {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#exit {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    color: white;
+    font-size: 24px;
+}
+
+.item {
     display: flex;
     align-items: center;
     width: 100%;
     height: 85px;
 }
 
-.chatAvatar {
+.itemAvatar {
     display: flex;
     flex: 1;
     height: 100%;
@@ -173,14 +190,14 @@ body {
     align-items: center;
 }
 
-.chatAvatar > img {
+.itemAvatar > img {
     width: 45px;
     height: 45px;
     overflow: hidden;
     border-radius: 100%;
 }
 
-.chatInfo {
+.itemInfo {
     color: silver;
     display: flex;
     flex-direction: column;
@@ -191,7 +208,7 @@ body {
     margin-left: 10px;
 }
 
-.chatName {
+.itemName {
     display: flex;
     align-items: center;
     width: 100%;
@@ -200,7 +217,7 @@ body {
     font-weight: 600;
 }
 
-.chatLastMessage {
+.itemSub {
     display: flex;
     align-items: center;
     width: 100%;
@@ -281,7 +298,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: 80px;
+    min-height: auto;
 }
 
 .message > img {
@@ -291,7 +308,7 @@ body {
 .senderInfo {
     display: flex;
     width: 100%;
-    height: 20px;
+    height: 50px;
 }
 
 .senderAvatar {
@@ -299,7 +316,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 60px;
-    height: 80%;
+    height: 100%;
 }
 
 .senderAvatar > img {
@@ -308,6 +325,10 @@ body {
     height: 35px;
     overflow: hidden;
     border-radius: 100%;
+}
+
+.selectUser {
+    color: green;
 }
 
 .senderName {
@@ -329,14 +350,39 @@ body {
 }
 
 .messageText {
-    display: inline-block;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 100%;
-    min-height: 100%;
-    padding-left: 30px;
+    min-height: auto;
+    padding-left: 20px;
     word-wrap: break-word;
+}
+
+#text {
+    width: 100%;
+    min-height: auto;
+    margin-bottom: 4px;
+}
+
+h2 {
+    color: white;
+    margin: 5px;
+}
+
+#addFriend {
+    margin: 2px;
+    width: 70%;
+    height: 36px;
+    padding: 4px;
+    color: white;
+    background: none;
+    font-size: 18px;
+    border: none;
+}
+
+.container {
+    display: flex;
+    align-items: center;
 }
 
 .smile {
@@ -348,13 +394,13 @@ body {
     flex-direction: column;
     justify-content: flex-end;
     width: 100%;
-    height: 17vh;
+    min-height: 17vh;
 }
 
 #inputWrapper {
     display: flex;
     width: 100%;
-    min-height: 40%;
+    height: 40%;
 }
 
 #inputMessage {
@@ -467,8 +513,19 @@ body {
 
 .setting {
     display: flex;
+    align-items: center;
     width: 100%;
     height: 50px;
+}
+
+.settingAvatar {
+    min-width: auto;
+    min-height: auto;
+    margin-right: 10px;
+}
+
+.settingAvatar > img {
+    border-radius: 100%;
 }
 
 .settingName,.settingSelected {
@@ -532,8 +589,10 @@ body {
 #edit-img-block {
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: 100%;
     width: 200px;
+    overflow: hidden;
 }
 
 #edit-img-preview {

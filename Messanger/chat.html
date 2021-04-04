@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/defaultTheme.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/defaultTheme.css">
 </head>
 <body>
     
     <div id="app">
-        <div id="blackout" v-if="modal.seen" @keyup.esc="close">
+        <div id="blackout" v-if="modal.seen">
+
+            <!-- Редактировать аккаунт -->
+
             <div id="auth-menu" v-if="modal.option == 'editMode'">
                 <div id="auth-menu-block">
                     <h1 id="title-auth">Редактировать</h1>
     <form id="x" enctype="multipart/form-data">
         <div id="edit-img">
         <div id="edit-img-block">
-            <img :src="loadedImg || user.avatarUrl" height="150px" id="edit-img-preview">
+            <img :src="loadedImg || editUserBuffer.avatarUrl" id="edit-img-preview">
             <div id="edit-img-btn">
                 <div id="blackout">
                     <div class="menuItem">
@@ -28,53 +31,49 @@
                 </div>
             </div>
         </div>
-        
     </div>
     <div id="input-auth-block">
-    <input type="text" class="inputAuth" id="name" name="nickname"
-    placeholder="Введите имя" v-model="edit.nickname"
-    > 
+    <input autocomplete="off" type="text" class="inputAuth" id="name" name="nickname"
+    placeholder="Введите имя" v-model="editUserBuffer.nickname"> 
     </div>
     <div id="input-auth-block">
-        <input type="text" class="inputAuth" id="status" name="userStatus"
-        placeholder="Введите статус" v-model="edit.status"
-        >
+        <input autocomplete="off" type="text" class="inputAuth" id="status" name="userStatus"
+        placeholder="Введите статус" v-model="editUserBuffer.status">
         </div>
     </form>
-    
     <button class="saveBtn"
     @click="editUser"
     >Сохранить</button>
                 </div>
             </div>
+
+            <!-- Создать беседу -->
+
             <div id="auth-menu" v-if="modal.option == 'newConv'">
                 <div id="auth-menu-block">
                     <h1 id="title-auth">Создать беседу</h1>
     <form id="n" enctype="multipart/form-data">
         <div id="edit-img">
         <div id="edit-img-block">
-            <img height="150px" id="edit-img-preview">
+            <img id="edit-img-preview" name="convIco">
             <div id="edit-img-btn">
                 <div id="blackout">
                     <div class="menuItem">
                     <img src="images/photo.png" id="photo-ico">
-                    <input type="file" id="editImg" name="editImg"
+                    <input type="file" id="editImg"
         @input="uploadFile('editImg','edit-img-preview','default')" >
                 </div>
                 </div>
             </div>
         </div>
-        
     </div>
     <div id="input-auth-block">
-    <input type="text" class="inputAuth" id="name" name="convName"
-    placeholder="Введите название" v-model="newConv.name"
-    > 
+    <input autocomplete="off" type="text" class="inputAuth" id="name" name="convName"
+    placeholder="Введите название" v-model="newConv.name"> 
     </div>
     <div id="input-auth-block">
-        <input type="text" class="inputAuth" id="status" name="convSubname"
-        placeholder="Введите подпись" v-model="newConv.subname"
-        >
+        <input autocomplete="off" type="text" class="inputAuth" id="status" name="convSubname"
+        placeholder="Введите подпись" v-model="newConv.subname">
         </div>
     </form>
     
@@ -83,6 +82,49 @@
     >Создать</button>
                 </div>
             </div>
+
+            <!-- Участники беседы -->
+
+            <div id="auth-menu" v-if="modal.option == 'convMembers'">
+                <div id="auth-menu-block">
+                    <h1 id="title-auth">Участники ({{ selectedItem.members.length }} / 5)</h1>
+                    <div class="blackoutMenuItem" v-for="user in selectedItem.members">
+                        <div class="setting">
+                            <div class="settingAvatar">
+                                <img :src="user.avatarUrl" width="36">
+                            </div>
+                            <div class="settingName dark">{{ user.nickname }}</div>
+                        </div>
+                    </div>
+                    <button class="saveBtn"
+                    @click="chooseSetting('addMember')"
+                    >Добавить участника</button>
+                </div>
+                
+            </div>
+
+            <!-- Пригласить в беседу -->
+
+            <div id="auth-menu" v-if="modal.option == 'addMember'">
+                <div id="auth-menu-block">
+                    <h1 id="title-auth">Пригласить в беседу</h1>
+                    <div class="blackoutMenuItem" v-for="friend in canInvite">
+                        <div class="setting">
+                            <div class="settingAvatar">
+                                <img :src="'avatars/' + friend.avatarUrl" width="36">
+                            </div>
+                            <div class="settingName dark">{{ friend.nickname }}</div>
+                            <img src="images/darkAdd.png" width="18" alt=""
+                            @click="invite(friend,selectedItem.id)"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Настройки -->
+
             <div id="auth-menu" v-if="modal.option == 'other'">
                 <div id="auth-menu-block">
     <h1 id="title-auth">{{ blackoutContent.title }}</h1>
@@ -94,17 +136,18 @@
     <button class="saveBtn" @click="close">Сохранить</button>
                 </div>
             </div>
+
         </div>
         <div id="sidebar">
             <div id="userInfo">
                 <div id="avatarBlock">
-                    <img height="60px" :src="user.avatarUrl">
+                    <img height="60px" :src="user.avatarUrl" alt="">
                 </div>
                 <div id="userInfoBlock">
                     <div id="username">{{ user.nickname }}</div>
                     <div id="userStatus">{{ user.status }}</div>
                 </div>
-                <div id="editBlock" @click="openUserEditor">
+                <div id="editBlock" @click="chooseSetting('editMode')">
                     <img width="30px" src="images/edit.png">
                 </div>
             </div>
@@ -115,8 +158,8 @@
                     <img src="images/messages.png">
                 </div>
                 <div class="menuItem" 
-                @click="selected = 'contacts'"
-                :class="{active : selected == 'contacts'}">
+                @click="selected = 'friends'"
+                :class="{active : selected == 'friends'}">
                     <img src="images/friends.png">
                 </div>
                 <div class="menuItem" 
@@ -134,17 +177,22 @@
         placeholder="Search"
         id="search"
         v-model="searchValue"
+        autocomplete="off"
         @input="Search">
-        <div id="menuItems" v-if="selected == 'chats'">
-            <div class="chatItem"
-            v-for="chat in chats.visibleChats"
+        <div id="menuItemsWrapper">
+
+            <!-- Чаты -->
+
+            <div id="menuItems" v-if="selected == 'chats'">
+            <div class="item"
+            v-for="chat in visible.chats"
             @click="select(chat)">
-                <div class="chatAvatar">
-                    <img :src="'avatars/' + chat.avatarUrl">
+                <div class="itemAvatar">
+                    <img :src="chat.avatarUrl">
                 </div>
-                <div class="chatInfo">
-                    <div class="chatName">{{ chat.name}}</div>
-                    <div class="chatLastMessage">{{ chat.description }}</div>
+                <div class="itemInfo">
+                    <div class="itemName">{{ chat.name}}</div>
+                    <div class="itemSub">{{ chat.description }}</div>
                 </div>
             </div>
         <div id="addContact">
@@ -155,6 +203,60 @@
             >
         </div>
         </div>
+
+        <!-- Друзья -->
+
+        <div id="menuItems" v-if="selected == 'friends'">
+            <div class="item"
+            v-for="friend in visible.friends"
+            >
+                <div class="itemAvatar">
+                    <img :src="friend.avatarUrl">
+                </div>
+                <div class="itemInfo">
+                    <div class="itemName">{{ friend.nickname}}</div>
+                    <div class="itemSub">{{ friend.status }}</div>
+                </div>
+            </div>
+        <div id="addContact">
+            Добавить друга (не работает)
+            <img src="images/add.png"
+            class="menuItem"
+            @click="selected = 'dial'"
+            >
+        </div>
+        </div>
+
+        <!-- Поиск людей -->
+
+        <div id="menuItems" v-if="selected == 'dial'">
+            <h2>Поиск людей (не работает)</h2>
+                <div class="container row">
+                    <input type="text" placeholder="Введине ник пользователя" 
+                    id="addFriend"
+                    v-model="searchUserValue"
+                    >
+                    <img src="images/search.png" width="16">
+                </div>
+                <div class="item"
+                v-if="searchedUser"
+            >
+                <div class="itemAvatar">
+                    <img :src="'avatars/' + searchedUser.avatarUrl">
+                </div>
+                <div class="itemInfo">
+                    <div class="itemName">{{ searchedUser.nickname}}</div>
+                    <div class="itemSub">{{ searchedUser.status }}</div>
+                </div>
+                <img src="images/add.png"
+                @click="doFriend(searchedUser)"
+                v-if="!isFriend(searchedUser.id)"
+                width="18" alt="">
+            </div>
+        </div>
+
+        <!-- Настройки -->
+
         <div id="menuItems" v-if="selected == 'settings'">
             <div class="setting" @click="chooseSetting('other')">
                 <div class="settingName" >Тема :</div>
@@ -165,12 +267,16 @@
                 <div class="settingSelected">Русский</div>
             </div>
         </div>
+
+
+        <pre id="exit" @click="exit"><img src="images/exit.png"> Выйти</pre>
+        </div>
     </div>
-        <div id="chat">
+        <div id="chat" v-if="chats.length">
             <div id="chatHeader">
                 <div id="chatHeaderWrapper">
                     <div id="chatAvatar">
-    <img :src="'avatars/' + selectedItem.avatarUrl"/>
+    <img :src="selectedItem.avatarUrl"/>
                 </div>
                 <div id="chatInfo">
                     <div id="chatName">{{ selectedItem.name }}</div>
@@ -178,7 +284,7 @@
                 </div>
                 </div>
                 <div id="invite">
-                    <a href="#">Пригласить</a>
+                    <a href="#" @click="chooseSetting('convMembers')">Пригласить</a>
                 </div>
             </div>
             <div id="messages">
@@ -195,9 +301,9 @@
                     <div class="messageText">
                         <div id="text" v-html="message.text"></div>
                         <img
-                        width="200"
-                        v-if="message.imgSrc"
-                        :src="message.imgSrc">
+                        width="400"
+                        v-if="message.img"
+                        :src="message.img">
                     </div>
                     
                 </div>
@@ -217,14 +323,14 @@
                     <div class="imgBtn">
                         <img src="images/clip.png" height="30px">
         <input type="file" id="inputFile" name="uploadImg"
-        @input="uploadFile('inputFile','-','msg')">
+        @input="uploadFile('inputFile',null,'msg')">
                     </div>  
                     <div class="imgBtn">
                         <img src="images/telegram.png" @click="sendMessage" height="30px">
                     </div>
                 </div>
-        <div id="previewImg-block" v-if="message.imgSrc">
-                    <img :src="message.imgSrc" width="100" id="previewImg">
+        <div id="previewImg-block" v-if="message.img">
+                    <img :src="message.img" width="100" id="previewImg">
                 </div>
             </div>
         </div>
