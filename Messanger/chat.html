@@ -111,7 +111,7 @@
                     <div class="blackoutMenuItem" v-for="friend in canInvite">
                         <div class="setting">
                             <div class="settingAvatar">
-                                <img :src="'avatars/' + friend.avatarUrl" width="36">
+                                <img :src="friend.avatarUrl" width="36">
                             </div>
                             <div class="settingName dark">{{ friend.nickname }}</div>
                             <img src="images/darkAdd.png" width="18" alt=""
@@ -178,7 +178,7 @@
         id="search"
         v-model="searchValue"
         autocomplete="off"
-        @input="Search">
+        >
         <div id="menuItemsWrapper">
 
             <!-- Чаты -->

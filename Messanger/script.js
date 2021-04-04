@@ -18,8 +18,6 @@ const Messanger = {
           blackoutContent: {},
           selectedItem : {},
           searchValue : "",
-          searchUserValue : "",
-
           user : {
               editSeen : false,
               avatarUrl : "avatars/7f9b7694df762d4a43e9a67760ba61af.jpg",
@@ -29,9 +27,16 @@ const Messanger = {
               permission : 'admin',
               friends : [
                   {
+                    id : 1,
                     avatarUrl : "avatars/default.jpg",
                     nickname : "Другой пользователь",
                     status : 'Тестер',
+                  },
+                  {
+                    id : 2,
+                    avatarUrl : "avatars/default.jpg",
+                    nickname : "Ещё кто-то",
+                    status : 'Статус*',
                   }
                 ],
               id : ''
@@ -50,10 +55,12 @@ const Messanger = {
                     description : 'Коммунисты',
                     messages : [],
                     members : [{
+                        id : 0,
               avatarUrl : "avatars/7f9b7694df762d4a43e9a67760ba61af.jpg",
               nickname : "Артём",
               status : "Создатель проекта",
                     },{
+                        id : 1,
                         avatarUrl : "avatars/default.jpg",
                         nickname : "Другой пользователь",
                         status : 'Тестер',
@@ -69,7 +76,7 @@ const Messanger = {
 
     computed : {
         canInvite(){
-            let friends = this.user.friends.allFriends.slice(0)
+            let friends = this.user.friends.slice(0)
             let members = this.selectedItem.members.map(item => item.id)
             friends = friends.filter(item => {
                 return !members.includes(item.id)
@@ -202,7 +209,6 @@ const Messanger = {
         }
         if(contact.name){
             this.chats.allChats.push(contact)
-            this.Search()
             this.close()
         } else {
             alert('Укажите имя беседы')
@@ -210,10 +216,7 @@ const Messanger = {
       },
 
       invite(user,contactId){
-          console.log(user)
-        socket.emit('invite',{
-            user,contactId
-        })
+        this.selectedItem.members.push(user)
       },
 
       chooseSetting(setting){
@@ -234,8 +237,7 @@ const Messanger = {
       editUser(){
         const avatarUrl = document.getElementById('edit-img-preview').src
         this.uploadFile('editImg',null,'save')
-        console.log(this.loaded)
-        this.user = this.editUserBuffer
+        Object.assign(this.user,this.editUserBuffer)
         this.user.avatarUrl = avatarUrl
         this.modal.seen = false
       },
@@ -249,8 +251,6 @@ const Messanger = {
     },
     doFriend(user){
         this.user.friends.allFriends.push(user)
-        this.Search()
-        this.searchUserValue = ''
         this.searchedUser = null
     },
     },
