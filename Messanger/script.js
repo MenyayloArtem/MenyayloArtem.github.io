@@ -178,7 +178,7 @@ const Messanger = {
       },
 
       chooseTheme(theme){
-        return function(){
+        return ()=>{
             this.theme = theme
             document.getElementsByTagName('link')[1].href = `css/${theme}Theme.css`
             localStorage.setItem('theme',theme)
