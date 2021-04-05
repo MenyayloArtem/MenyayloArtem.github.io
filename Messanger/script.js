@@ -208,7 +208,7 @@ const Messanger = {
             contact.description = 'Участники (1/5)'
         }
         if(contact.name){
-            this.chats.allChats.push(contact)
+            this.chats.push(contact)
             this.close()
         } else {
             alert('Укажите имя беседы')
