@@ -192,7 +192,9 @@
                 </div>
                 <div class="itemInfo">
                     <div class="itemName">{{ chat.name}}</div>
-                    <div class="itemSub">{{ chat.description }}</div>
+                    <div class="itemSub">{{
+                    chat.description || "Участники " + chat.members.length + '/5'
+                    }}</div>
                 </div>
             </div>
         <div id="addContact">
@@ -280,7 +282,10 @@
                 </div>
                 <div id="chatInfo">
                     <div id="chatName">{{ selectedItem.name }}</div>
-                    <div id="chatDesc">{{ selectedItem.description }}</div>
+                    <div id="chatDesc">{{
+                        selectedItem.description || "Беседа"
+                    }}
+                </div>
                 </div>
                 </div>
                 <div id="invite">
@@ -293,9 +298,9 @@
                 >
                     <div class="senderInfo">
                         <div class="senderAvatar">
-                            <img  :src="'avatars/' + message.avatarUrl">
+                            <img  :src="message.avatarUrl">
                         </div>
-                        <div class="senderName">{{ message.sender }}</div>
+                        <strong class="senderName">{{ message.sender }}</strong>
                         <div class="dispathTime">00:00</div>
                     </div>
                     <div class="messageText">

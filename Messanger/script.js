@@ -39,7 +39,7 @@ const Messanger = {
                     status : 'Статус*',
                   }
                 ],
-              id : ''
+              id : 0
           },
 
         newConv: {
@@ -49,24 +49,8 @@ const Messanger = {
         },
 
         chats : [
-                {
-                    avatarUrl : 'avatars/BwFyibsDUmc.jpg',
-                    name : 'three friends',
-                    description : 'Коммунисты',
-                    messages : [],
-                    members : [{
-                        id : 0,
-              avatarUrl : "avatars/7f9b7694df762d4a43e9a67760ba61af.jpg",
-              nickname : "Артём",
-              status : "Создатель проекта",
-                    },{
-                        id : 1,
-                        avatarUrl : "avatars/default.jpg",
-                        nickname : "Другой пользователь",
-                        status : 'Тестер',
-                    }]
-                }
-            ],
+            
+        ],
 
         searchedUser : null,
         loaded : null
@@ -96,6 +80,12 @@ const Messanger = {
         let chats = this.chats.filter(item => item.name.match(pattern))
         let friends = this.user.friends.filter(item => item.nickname.match(pattern))
         return {chats,friends}
+        },
+
+        membersCount(){
+            if(this.selectedItem){
+                return String(this.selectedItem.members.length)
+            }
         }
     },
 
@@ -103,7 +93,7 @@ const Messanger = {
     
       sendMessage(){
             let message = {
-                  avatarUrl : this.user.avatarUrl.split('/')[1],
+                  avatarUrl : this.user.avatarUrl,
                   sender : this.user.nickname,
                   senderId : this.user.id,
                   text : this.message.text.trim(),
@@ -133,14 +123,12 @@ const Messanger = {
       close(){
           this.modal.seen = false
       },
-    setImg(data){
-        this.message.img = data
-    },
+
     uploadFile(id,to,mode){
           let file = document.getElementById(id).files[0]
           let reader = new FileReader()
           if(file){
-            reader.onloadend =  () => {
+            reader.onloadend = () => {
             let result = reader.result
             switch(mode){
                 case 'default' : {
@@ -154,7 +142,7 @@ const Messanger = {
                 }
                 break;
                 case 'msg' : {
-                    this.setImg(result)
+                    this.message.img = data
                 }
                 break;
                 case 'get' : {
@@ -166,13 +154,13 @@ const Messanger = {
           } else {
               result = null
           }
-          
       },
 
       select(chat){
         if(this.selectedItem){
             if(chat){
                 this.selectedItem = chat
+                console.log(this.selectedItem.members.length)
             }
         }
       },
@@ -193,23 +181,18 @@ const Messanger = {
             name : fd.get('convName'),
             description : fd.get('convSubname'),
             messages : [],
-            members : [{
-                avatarUrl : "avatars/7f9b7694df762d4a43e9a67760ba61af.jpg",
-                nickname : "Артём",
-                status : "Создатель проекта",
-            }]
+            members : [this.user]
         }
         const avatarUrl = document.getElementById('edit-img-preview').src
         contact.avatarUrl = avatarUrl
         if(!contact.avatarUrl){
             contact.avatarUrl = 'avatars/default.jpg'
         }
-        if(!contact.description){
-            contact.description = 'Участники (1/5)'
-        }
         if(contact.name){
             this.chats.push(contact)
+            this.select(this.chats[this.chats.length - 1])
             this.close()
+            
         } else {
             alert('Укажите имя беседы')
         }
