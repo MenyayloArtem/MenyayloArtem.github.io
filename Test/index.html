@@ -3,31 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css">
     <title>Document</title>
 </head>
 <body>
 <div id="app">
-    <header>
-        <nav>
+    <nav>
             <div id="mid-block">
-                <a href="#" class="nav-item logo">Logo</a>
-                <a href="/" class="nav-item">Home</a>
-                <a href="/newPost.html" class="nav-item">New post</a>
-                <a href="#" class="nav-item">Portfolio</a>
-                <a href="#" class="nav-item">Blog</a>
-                <a href="#" class="nav-item">Contact us</a>
-                <a class="nav-item" href="/login.html">Login</a>
-                <a href="#" id="search-btn"></a>
+                <div href="#" class="nav-item logo">Logo</div>
+                <div class="desc-nav">
+                <a href="#home" class="nav-item">Home</a>
+                <a href="#about-us" class="nav-item">About</a>
+                <a href="#our-services" class="nav-item">Servives</a>
+                <a href="#blog" class="nav-item">Blog</a>
+                <a href="#contact-us" class="nav-item">Contact us</a>
+                </div>
+                <div class="mobile-nav">
+                    <img src="menu.png" alt="menu">
+                </div>
+                
             </div>
         </nav>
+        <div id="main-wrapper">
+<header id="home">
         <div id="header-body">
             <div id="title-block">
         <div id="title">Web development project</div>
         <div id="subtitle">Very suitable to support all web development projects</div>
         <div id="header-buttons">
             <div id="header-btn">OUR SERVIVES</div>
-            <div id="header-btn">HIRE IT NOW</div>
+            <a href="/login.html" id="header-btn">HIRE IT NOW</a>
         </div>
             </div>
         </div>
@@ -220,14 +225,14 @@
         </div>
         <div id="works">
             <div class="row">
-                <div class="work"><img src="images/Rectangle1.png" alt=""></div>
-                <div class="work"><img src="images/Rectangle2.png" alt=""></div>
-                <div class="work"><img src="images/Rectangle3.png" alt=""></div>
+                <div class="work"><img src="images/Rectangle1.png"></div>
+                <div class="work"><img src="images/Rectangle2.png"></div>
+                <div class="work"><img src="images/Rectangle3.png"></div>
             </div>
             <div class="row">
-                <div class="work"><img src="images/Rectangle2.png" alt=""></div>
-                <div class="work"><img src="images/Rectangle4.png" alt=""></div>
-                <div class="work"><img src="images/Rectangle5.png" alt=""></div>
+                <div class="work"><img src="images/Rectangle2.png"></div>
+                <div class="work"><img src="images/Rectangle4.png"></div>
+                <div class="work"><img src="images/Rectangle5.png"></div>
             </div>
         </div>
         <div id="btn-wrapper">
@@ -237,10 +242,7 @@
         </div>
     </section>
     <section id="blog">
-        <div class="wrapper">
-            <div class="caption">
-            Blog
-        </div>
+        <div class="caption">Blog</div>
         <div class="subcaption-text">
             <div class="subcaption-block">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus labore facere tempora perspiciatis ea, et temporibus obcaecati minima nam maiores eos quod, autem aspernatur minus voluptas consequatur architecto officiis! Maxime?
@@ -249,7 +251,7 @@
         <div id="posts" v-if="postsSeen">
             <div class="post" v-for="post in posts.slice(0,3)">
                 <div class="post-img">
-                    <img :src="'uploads/'+ post.imgPath" width="570" height="402">
+                    <img :src="'uploads/'+ post.avatarSrc">
                 </div>
                 <div class="post-info">
                     <div class="post-info-wrapper">
@@ -262,7 +264,7 @@
                             <img src="images/sm-ico.png" alt="" class="sm-ico">
                         </div>
                         <div class="sm-text">
-                            {{ post.date.slice(0,10) }}
+                            {{ post.dispathTime.split('T')[0] }}
                         </div>
                     </div>
                     <div class="sm-info">
@@ -283,7 +285,7 @@
                     </div>
                     </div>
                     <div class="post-text">
-    {{ post.text.trim().length > 200 ? post.text.trim().slice(0,197)+'...' : post.text.trim() }}
+    {{ post.body.trim().length > 200 ? post.body.trim().slice(0,197)+'...' : post.body.trim() }}
                     </div>
                     </div>
                 </div>
@@ -292,11 +294,10 @@
         <p v-else id="no-posts">
             Пока что постов нет
         </p>
-        </div>
         <div id="view-more-btn"></div>
     </section>
     <section id="contact-us">
-        <div class="wrapper light">
+        <div class="light">
             <div class="caption light">
             Contact Us
         </div>
@@ -352,8 +353,45 @@
     <section id="copyright">
         All rights Reserved © 2020
     </section>
+        </div>
+    
 </div>
 <script src="https://unpkg.com/vue@next"></script>
-<script src="script.js"></script>
+<script src="../script.js"></script>
+<script>
+    let els = document.querySelectorAll('a.nav-item')
+    function checkActive(){
+        let y = window.pageYOffset
+        let current = 0
+        coords.forEach((item,i)=>{
+            if(y+10 > coords[i]){
+                current = i
+            }
+        })
+        els.forEach(item => item.className = 'nav-item')
+        els[current].className += ' active'
+    }
+    let coords = Array.from(els).map(el => {
+    let id = el.href.split('#')[1]
+    let section = document.getElementById(id)
+    let top = section.getBoundingClientRect().top + pageYOffset
+
+
+    el.addEventListener('click',(e)=>{
+    e.preventDefault()
+    window.scrollTo({
+        top : top-80,
+        behavior : 'smooth'
+    })
+    })
+    return top-80
+    })
+    checkActive()
+    //console.log(els)
+    document.addEventListener('scroll',(e)=>{
+        checkActive()
+    })
+    
+</script>
 </body>
 </html>
