@@ -750,4 +750,8 @@ textarea {
         width: 90%;
         border-radius: 7px;
     }
+
+    body {
+        overflow-x: visible;
+    }
 }
