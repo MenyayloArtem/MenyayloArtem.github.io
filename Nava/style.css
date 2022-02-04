@@ -51,6 +51,10 @@ header {
     padding-left: 30px;
 }
 
+.logo > img {
+    width: 128px;
+}
+
 .lg-title {
     color: #f9fafe;
     text-align: center;
@@ -243,6 +247,7 @@ section, footer {
 }
 
 .title {
+    text-align: center;
     margin-top: 30px;
     color: #343435;
     font-size: 30px;
@@ -358,5 +363,9 @@ footer > .container-fluid > * {
 
     .lg-subtitle {
         font-size: 24px;
+    }
+
+    .logo > img {
+        width: 100px;
     }
 }
