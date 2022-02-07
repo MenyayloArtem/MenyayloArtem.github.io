@@ -1,6 +1,7 @@
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -80,7 +81,8 @@ nav {
 
 #t2 {
     background: #282828;
-    height: 856px;
+    min-height: 856px;
+    padding: 10px;
     padding-top: 100px;
 }
 
@@ -220,7 +222,7 @@ input {
 }
 
 .contact-input {
-    width: 256px;
+    width: 45%;
 }
 
 .message-input {
@@ -243,19 +245,19 @@ input {
 
 .img0 {
     position: absolute;
-    bottom: -50px;
+    bottom: -5px;
 }
 
 .img1 {
     position: absolute;
     top: 34px;
-    left: -50px;
+    left: -70px;
 }
 
 .img2 {
     position: absolute;
     top: 64px;
-    right: -50px
+    right: -70px
 }
 
 footer {
@@ -281,5 +283,10 @@ footer > .br-border:nth-child(2) > .nav-item {
 @media (max-width: 576px) {
     header > .info > .text {
         padding: 0 10px;
+    }
+
+    .text-block {
+        border-left: none;
+        border-right: none;
     }
 }
