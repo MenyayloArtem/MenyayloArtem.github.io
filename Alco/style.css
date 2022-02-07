@@ -1,0 +1,285 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+::-webkit-scrollbar {
+    width: 0;
+}
+
+.full {
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+header , section {
+    max-width: 1920px;
+}
+
+header {
+    position: relative;
+    height: 900px;
+    background: url("images/bgc.png");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.text {
+    color: white;
+    font-size: 13px;
+    margin-top: 30px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+.br-border > .nav-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    border: 1px solid white;
+    border-right: none;
+    height: 46px;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    text-decoration: underline;
+}
+
+.nav-item:first-child {
+    border-left: none;
+}
+
+.buttons {
+    margin-top: 600px;
+}
+
+.buttons > .btn {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 203px;
+    height: 50px;
+    background: #99862A;
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0 15px;
+    cursor: pointer;
+}
+
+#t2 {
+    background: #282828;
+    height: 856px;
+    padding-top: 100px;
+}
+
+.text-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 656px;
+    border: 3px solid white;
+    padding: 60px;
+}
+
+.lg-text {
+    color: white;
+    font-size: 36px;
+    text-align: center;
+}
+
+.line {
+    width: 160px;
+    border: 1px solid white;
+    border-bottom: none;
+    margin: 40px;
+}
+
+.text-block > .text {
+    max-width: 733px;
+    line-height: 24px;
+    margin-bottom: 50px;
+}
+
+#t3 {
+    min-height: 1038px;
+    background: #E6E3C4;
+}
+
+.vine-block {
+    margin-bottom: 80px;
+    min-height: 768px;
+}
+
+.bl-text {
+    color: #000000;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.black {
+    color: #282828;
+    text-align: left;
+}
+
+.dark-line {
+    border-top: 1px solid #282828;
+}
+
+.table-row {
+    display: flex;
+    border-top: 1px solid #000000;
+    height: 76px;
+}
+
+.table-row:first-child {
+    border: none;
+}
+
+.row-num {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #000000;
+    width: 76px;
+    height: 100%;
+}
+
+.row-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 15px;
+    padding-left: 30px;
+}
+
+.row-text-bold {
+    font-size: 20px;
+    color: #282828;
+    font-weight: 600;
+    text-align: left;
+}
+
+.row-text-default {
+    font-size: 15px;
+    color: #282828;
+    text-align: left;
+}
+
+.images {
+    padding-bottom: 60px;
+}
+
+#t4 {
+    min-height: 768px;
+    background: #282828;
+    padding-top: 10px;
+}
+
+#t4 > .text-block {
+    position: relative;
+    border: 3px solid #fff;
+    border-top: none;
+    height: 538px;
+    margin-top: 100px;
+}
+
+#t4 > .text-block > .text {
+    margin-top: 0;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.inputs-wrapper {
+    width: 540px;
+}
+
+input {
+    background: none;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 10px;
+    font-size: 13px;
+    color: white;
+}
+
+.contact-input {
+    width: 256px;
+}
+
+.message-input {
+    margin-top: 40px;
+    width: 100%;
+}
+
+.border-btn {
+    display: flex;
+    width: 540px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 40px;
+    color: white;
+    border: 2px solid white;
+}
+
+.img0 {
+    position: absolute;
+    bottom: -50px;
+}
+
+.img1 {
+    position: absolute;
+    top: 34px;
+    left: -50px;
+}
+
+.img2 {
+    position: absolute;
+    top: 64px;
+    right: -50px
+}
+
+footer {
+    min-height: 220px;
+    padding-top: 50px;
+    background: #998431;
+}
+
+footer > .br-border:first-child > .nav-item {
+    border: none;
+}
+
+footer > .br-border:nth-child(2) > .nav-item {
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    #t4 > .text-block {
+        border: none;
+    }
+}
+
+@media (max-width: 576px) {
+    header > .info > .text {
+        padding: 0 10px;
+    }
+}
